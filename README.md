@@ -11,10 +11,15 @@ set validation setting on that property like so:
 class model {
 
 	/**
-	 *
 	 * @required
 	 * @type int
 	 */
 	 public $id;
 }
+```
+
+When you want to validate an object you can do it like this:
+
+```php
+$validation = $validator->ValidateObject($object);
 ```
