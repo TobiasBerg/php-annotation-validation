@@ -1,4 +1,4 @@
-# Object validation with replication in PHP
+# Object validation with reflection in PHP
 
 For a project I wanted easy and consistent validation of my objects.
 
