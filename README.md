@@ -36,7 +36,7 @@ object(model)[2]
   public 'id' => 123
   public 'name' => 'PHP'
   public 'validated' => 
-    array (size=3)
+    array (size=2)
       'id' => boolean true
       'name' => boolean true
 ```
