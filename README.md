@@ -26,7 +26,7 @@ class model {
 When validating the object this will set a ->validated property which holds the validation status for the properties.
 
 ```php
-$validated_model = $annotation_Validation->validateObject($object);
+$validatedModel = $annotationValidation->validateObject($object);
 ```
 
 The object will then look like this:
@@ -44,5 +44,5 @@ object(model)[2]
 You can check if an object is valid by calling
 
 ```php
-$validated_model = $annotation_Validation->isObjectValid($object);
+$isValid = $annotationValidation->isObjectValid($object);
 ```
