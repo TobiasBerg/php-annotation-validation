@@ -1,64 +1,64 @@
 <?php
-/**
- *
- */
-class Repli_Validation
+class Annotation_Validation
 {
-	/**
-	 * Method for validating
-	 */
-	public function ValidateObject($object)
+	public function isObjectValid($object)
 	{
-		$properties = $this->GetClassProperties(get_class($object));
+		if (!$object->validated) {
+			$object = $this->validateObject($object);
+		}
 
+		if (in_array(false, $object->validated)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public function validateObject($object)
+	{
+		$properties = $this->_getClassProperties(get_class($object));
 		$propertyAnnotations = array();
 
 		foreach($properties as $property)
 		{
-			$propertyAnnotation = $this->GetPropertyAnnotations($property, get_class($object));
-			$propertyAnnotations[] = $propertyAnnotation;
+			$propertyAnnotations = $this->_getPropertyAnnotations($property, get_class($object));
 
-			foreach ($propertyAnnotation as $annotation) {
-				$annotation = str_replace('type ', '', $annotation);
+			foreach ($propertyAnnotations as $propertyAnnotation) {
+				$annotation = str_replace('type ', '', $propertyAnnotation);
 
-				$errors = array();
-
-				if (strpos($annotation, 'string') !== false) {
-					$errors[] = $this->ValidateString($annotation);
-				}
-
-				if (strpos($annotation, 'int') !== false) {
-					$errors[] = $this->ValidateInt($annotation);
-				}
-
-				if (strpos($annotation, 'required') !== false) {
-					$errors[] = $this->ValidateNullOrEmpty($annotation);
-				}
-
-				if (empty($errors)) {
-					echo 'SUCCESS';
-				}
+				$object->validated[$property->name] = $this->_validateProperty($annotation);
 			}
+		}
+
+		return $object;
+	}
+
+	private function _validateProperty($annotation)
+	{
+		if (strpos($annotation, 'string') !== false) {
+			return $this->_validateString($annotation);
+		}
+
+		if (strpos($annotation, 'int') !== false) {
+			return $this->_validateInt($annotation);
+		}
+
+		if (strpos($annotation, 'required') !== false) {
+			return $this->_validateNullOrEmpty($annotation);
 		}
 	}
 
-	/**
-	 * Getting class properties in a Reflection Object.
-	 */
-	private function GetClassProperties($class)
+	private function _getClassProperties($class)
 	{
-		$r = new ReflectionClass($class);
-		$properties = $r->getProperties();
+		$ReflectionClass = new ReflectionClass($class);
+		$properties = $ReflectionClass->getProperties();
 
 		return $properties;
 	}
 
-	/**
-	 * Gets the actual Annotations of the properties.
-	 */
-	private function GetPropertyAnnotations($property, $className)
+	private function _getPropertyAnnotations($property, $className)
 	{
-		$annotation = $property->GetDocComment();
+		$annotation = $property->getDocComment();
 
 		preg_match_all('#@(.*?)\n#s', $annotation, $annotations);
 
@@ -70,19 +70,19 @@ class Repli_Validation
 		return $trimmedAnnotation;
 	}
 
-	private function ValidateString($value)
+	private function _validateString($value)
 	{
-
+		return is_string($value);
 	}
 
-	private function ValidateInt($value)
+	private function _validateInt($value)
 	{
-
+		return is_int($value);
 	}
 
-	private function ValidateNullOrEmpty($value)
+	private function _validateNullOrEmpty($value)
 	{
-
+		return empty(trim($value));
 	}
 }
 ?>
