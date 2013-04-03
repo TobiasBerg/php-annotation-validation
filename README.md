@@ -1,11 +1,11 @@
 # Object validation with reflection in PHP
 
-For a project I wanted easy and consistent validation of my objects.
+A simple way of validating properties of models with the help of annotations.
 
 ## Usage
 
-On the properties of your object you add doc-block style comments to
-set validation setting on that property like so:
+On the properties of your object you add annotations to
+set validation settings on that property like so:
 
 ```php
 class model {
@@ -15,11 +15,34 @@ class model {
 	 * @type int
 	 */
 	 public $id;
+
+	 /**
+	 * @type string
+	 */
+	 public $name;
 }
 ```
 
-When you want to validate an object you can do it like this:
+When validating the object this will set a ->validated property which holds the validation status for the properties.
 
 ```php
-$validation = $validator->ValidateObject($object);
+$validated_model = $annotation_Validation->validateObject($object);
+```
+
+The object will then look like this:
+
+```
+object(model)[2]
+  public 'id' => 123
+  public 'name' => 'PHP'
+  public 'validated' => 
+    array (size=3)
+      'id' => boolean true
+      'name' => boolean true
+```
+
+You can check if an object is valid by calling
+
+```php
+$validated_model = $annotation_Validation->isObjectValid($object);
 ```
