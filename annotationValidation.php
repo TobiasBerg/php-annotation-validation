@@ -82,7 +82,8 @@ class Annotation_Validation
 
 	private function _validateNullOrEmpty($value)
 	{
-		return empty(trim($value));
+		$trimmed = trim($value);
+		return empty($trimmed);
 	}
 }
 ?>
